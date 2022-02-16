@@ -1,0 +1,20 @@
+.App {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.guess {
+    margin-bottom: 8px;
+}
+
+.tile {
+    height: 40px;
+    margin-right: 8px;
+    width: 40px;
+}
+
+.game-state {
+    white-space: pre-wrap;
+}
