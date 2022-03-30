@@ -10,9 +10,15 @@
 }
 
 .tile {
-    height: 40px;
+    align-items: center;
+    display: inline-flex;
+    height: 50px;
+    font-size: 2rem;
+    justify-content: center;
     margin-right: 8px;
-    width: 40px;
+    text-align: center;
+    text-transform: uppercase;
+    width: 50px;
 }
 
 .game-state {

@@ -71,16 +71,28 @@ const Tile = ({ guessIndex, letterIndex }) => {
         })
     }
 
-    const getBackgroundColor = () => {
+    const getBackgroundColour = () => {
         switch (letter.status) {
             case LETTER_STATUS.CORRECT:
-                return 'green'
+                return '#6aaa64'
             case LETTER_STATUS.PARTIALLY_CORRECT:
-                return 'yellow'
+                return '#c9b458'
             case LETTER_STATUS.INCORRECT:
-                return 'lightgrey'
+                return '#86888a'
             default:
                 return null
+        }
+    }
+
+    const getColour = () => {
+        switch (letter.status) {
+            case LETTER_STATUS.CORRECT:
+            case LETTER_STATUS.PARTIALLY_CORRECT:
+            case LETTER_STATUS.INCORRECT:
+                return '#ffffff'
+                break;
+            default:
+                return '#000000'
         }
     }
 
@@ -88,9 +100,11 @@ const Tile = ({ guessIndex, letterIndex }) => {
         <input
             className="tile"
             disabled={guessIndex !== currentGuessIndex}
+            maxLength={1}
             onChange={handleChange}
             style={{
-                backgroundColor: getBackgroundColor(),
+                backgroundColor: getBackgroundColour(),
+                color: getColour(),
             }}
         />
     )
