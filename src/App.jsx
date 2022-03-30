@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { atom, selector, selectorFamily, useRecoilState, useRecoilValue, useSetRecoilState  } from "recoil";
 
 import "./App.css"
@@ -76,6 +77,11 @@ const Tile = ({ guessIndex, letterIndex }) => {
                 return g
             })
         })
+
+        const nextInput = document.getElementById(`tile-${guessIndex}-${letterIndex + 1}`);
+        if (nextInput) {
+            nextInput.focus()
+        }
     }
 
     const getBackgroundColour = () => {
@@ -107,6 +113,7 @@ const Tile = ({ guessIndex, letterIndex }) => {
         <input
             className="tile"
             disabled={guessIndex !== currentGuessIndex}
+            id={`tile-${guessIndex}-${letterIndex}`}
             maxLength={1}
             onChange={handleChange}
             pattern="[a-zA-Z]{1}"
@@ -121,6 +128,10 @@ const Tile = ({ guessIndex, letterIndex }) => {
 const App = () => {
     const [game, setGame] = useRecoilState(gameState);
     const currentGuessIndex = useRecoilValue(currentGuessIndexState);
+
+    useEffect(() => {
+        document.getElementById(`tile-0-0`).focus();
+    }, [])
 
     const submitGuess = (guessIndex) => {
         setGame((oldGame) => {
