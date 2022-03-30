@@ -50,7 +50,7 @@ const Tile = ({ guessIndex, letterIndex }) => {
     const [game, setGame] = useRecoilState(gameState);
 
     const handleKeyDown = e => {
-        console.log(e.keyCode, game)
+        // console.log(e.keyCode, game)
         switch (e.keyCode) {
             case 8: // Backspace
                 setGame((oldGame) => {
