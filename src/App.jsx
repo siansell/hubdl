@@ -48,7 +48,14 @@ const Tile = ({ guessIndex, letterIndex }) => {
     const letter = useRecoilValue(letterState({ guessIndex, letterIndex }))
     const setGame = useSetRecoilState(gameState)
 
-    const handleChange = ({ target: { value }}) => {
+    const handleChange = (e) => {
+        const { target } = e;
+        const { value } = target;
+        if (!target.checkValidity()) {
+            target.value = "";
+            return;
+        }
+
         setGame((oldGame) => {
             return oldGame.map((g, i) => {
                 if (guessIndex === i) {
@@ -102,6 +109,7 @@ const Tile = ({ guessIndex, letterIndex }) => {
             disabled={guessIndex !== currentGuessIndex}
             maxLength={1}
             onChange={handleChange}
+            pattern="[a-zA-Z]{1}"
             style={{
                 backgroundColor: getBackgroundColour(),
                 color: getColour(),
