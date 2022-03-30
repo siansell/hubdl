@@ -149,21 +149,31 @@ const App = () => {
     return (
         <div className="App">
             <h1>HUBDL</h1>
+            <hr className="divider" />
 
-            {game.map((guess, guessIndex) => (
-                <div className="guess" key={guessIndex}>
-                    {guess.letters.map((letter, letterIndex) => (
-                        <Tile
-                            key={`${guessIndex}-${letterIndex}`}
-                            guessIndex={guessIndex}
-                            letterIndex={letterIndex}
-                        />
-                    ))}
-                    <button onClick={() => submitGuess(guessIndex)} disabled={guessIndex !== currentGuessIndex}>Submit</button>
-                </div>
-            ))}
+            <div className="game">
+                {game.map((guess, guessIndex) => {
+                    const isSubmitDisabled = (guessIndex !== currentGuessIndex) || (game[guessIndex].letters.some(l => !l.letter))
+                    return (
+                        <div className="guess" key={guessIndex}>
+                            {guess.letters.map((letter, letterIndex) => (
+                                <Tile
+                                    key={`${guessIndex}-${letterIndex}`}
+                                    guessIndex={guessIndex}
+                                    letterIndex={letterIndex}
+                                />
+                            ))}
+                            <button
+                                onClick={() => submitGuess(guessIndex)}
+                                disabled={isSubmitDisabled}
+                            >
+                                Submit
+                            </button>
+                        </div>
+                    )})}
+            </div>
 
-            <hr />
+            <hr className="divider" />
 
             <pre className="game-state">{JSON.stringify(game, null, 2)}</pre>
         </div>
