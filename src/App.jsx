@@ -47,7 +47,53 @@ const letterState = selectorFamily({
 const Tile = ({ guessIndex, letterIndex }) => {
     const currentGuessIndex = useRecoilValue(currentGuessIndexState);
     const letter = useRecoilValue(letterState({ guessIndex, letterIndex }))
-    const setGame = useSetRecoilState(gameState)
+    const [game, setGame] = useRecoilState(gameState);
+
+    const handleKeyDown = e => {
+        console.log(e.keyCode, game)
+        switch (e.keyCode) {
+            case 8: // Backspace
+                setGame((oldGame) => {
+                    return oldGame.map((g, i) => {
+                        if (guessIndex === i) {
+                            return {
+                                ...g,
+                                letters: g.letters.map((l, j) => {
+                                    if (letterIndex - 1 === j) {
+                                        return {
+                                            ...l,
+                                            letter: null,
+                                        }
+                                    }
+                                    return l
+                                }),
+                            }
+                        }
+                        return g
+                    })
+                })
+                if (letterIndex === ANSWER.length - 1 && game[guessIndex].letters[ANSWER.length - 1]) { // Final letter of guess is populated
+                    // TODO need to handle thi scase in setGame above
+                    const currentTile = document.getElementById(`tile-${guessIndex}-${letterIndex}`);
+                    currentTile.value = "";
+                } else {
+                    const previousTile = document.getElementById(`tile-${guessIndex}-${letterIndex - 1}`);
+                    if (previousTile) {
+                        previousTile.value = "";
+                        previousTile.focus();
+                    }
+                }
+                break;
+            case 9: // Tab
+                console.log('tab')
+                break;
+            case 13: // Return
+                console.log('enter')
+                break;
+            default:
+                break;
+        }
+    }
 
     const handleChange = (e) => {
         const { target } = e;
@@ -116,6 +162,7 @@ const Tile = ({ guessIndex, letterIndex }) => {
             id={`tile-${guessIndex}-${letterIndex}`}
             maxLength={1}
             onChange={handleChange}
+            onKeyDown={handleKeyDown}
             pattern="[a-zA-Z]{1}"
             style={{
                 backgroundColor: getBackgroundColour(),
@@ -130,7 +177,7 @@ const App = () => {
     const currentGuessIndex = useRecoilValue(currentGuessIndexState);
 
     useEffect(() => {
-        document.getElementById(`tile-0-0`).focus();
+        document.getElementById("tile-0-0").focus();
     }, [])
 
     const submitGuess = (guessIndex) => {
