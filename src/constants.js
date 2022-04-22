@@ -1,5 +1,4 @@
 export const N_GUESSES = 6;
-export const ANSWER = 'HUBDL';
 
 export const GUESS_STATUS = Object.freeze({
   CLEAN: 'CLEAN',

@@ -1,17 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 
 import Tile from './Tile';
-import { currentGuessIndexState, gameState } from './state';
-import {
-  ANSWER, GUESS_STATUS, LETTER_STATUS,
-} from './constants';
+import { answerQuery, currentGuessIndexState, gameState } from './state';
+import { GUESS_STATUS, LETTER_STATUS } from './constants';
 
 import './App.css';
+
+function AppWrapper() {
+  return (
+    <div className="App">
+      <h1>HUBDL</h1>
+      <hr className="divider" />
+      <Suspense fallback={<div>Loading...</div>}>
+        <App />
+      </Suspense>
+    </div>
+  );
+}
 
 function App() {
   const [game, setGame] = useRecoilState(gameState);
   const currentGuessIndex = useRecoilValue(currentGuessIndexState);
+
+  const answer = useRecoilValue(answerQuery);
 
   useEffect(() => {
     document.getElementById('tile-0-0').focus();
@@ -24,7 +36,7 @@ function App() {
           ...g,
           letters: g.letters.map((l, letterIndex) => {
             let status;
-            const ucAnswer = ANSWER.toUpperCase();
+            const ucAnswer = answer.toUpperCase();
             const ucLetter = l.letter.toUpperCase();
 
             if (ucAnswer.charAt(letterIndex) === ucLetter) {
@@ -48,15 +60,12 @@ function App() {
   };
 
   return (
-    <div className="App">
-      <h1>HUBDL</h1>
-      <hr className="divider" />
-
+    <>
       <div className="game">
         {game.map((guess, guessIndex) => {
           const isSubmitDisabled = (guessIndex !== currentGuessIndex)
             || (game[guessIndex].letters.some((l) => !l.letter));
-            /* eslint-disable react/no-array-index-key */
+          /* eslint-disable react/no-array-index-key */
           return (
             <div className="guess" key={guessIndex}>
               {guess.letters.map((letter, letterIndex) => (
@@ -82,8 +91,8 @@ function App() {
       <hr className="divider" />
 
       <pre className="game-state">{JSON.stringify(game, null, 2)}</pre>
-    </div>
+    </>
   );
 }
 
-export default App;
+export default AppWrapper;

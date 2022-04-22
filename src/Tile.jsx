@@ -4,12 +4,13 @@ import {
   useRecoilState, useRecoilValue,
 } from 'recoil';
 
-import { currentGuessIndexState, gameState, letterState } from './state';
 import {
-  ANSWER, GUESS_STATUS, LETTER_STATUS,
-} from './constants';
+  answerQuery, currentGuessIndexState, gameState, letterState,
+} from './state';
+import { GUESS_STATUS, LETTER_STATUS } from './constants';
 
 function Tile({ guessIndex, letterIndex }) {
+  const answer = useRecoilValue(answerQuery);
   const currentGuessIndex = useRecoilValue(currentGuessIndexState);
   const letter = useRecoilValue(letterState({ guessIndex, letterIndex }));
   const [game, setGame] = useRecoilState(gameState);
@@ -35,7 +36,7 @@ function Tile({ guessIndex, letterIndex }) {
           }
           return g;
         }));
-        if (letterIndex === ANSWER.length - 1 && game[guessIndex].letters[ANSWER.length - 1]) {
+        if (letterIndex === answer.length - 1 && game[guessIndex].letters[answer.length - 1]) {
           // Final letter of guess is populated
 
           // TODO need to handle thi scase in setGame above
